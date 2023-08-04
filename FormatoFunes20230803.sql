@@ -16,7 +16,7 @@ CREATE FUNCTION TotalProductosVendidos(
     fecha_fin DATE
 )
 RETURNS INT
-NO SQL
+READS SQL DATA
 BEGIN
     DECLARE total_vendidos INT;
     
@@ -30,21 +30,19 @@ END //
 
 DELIMITER ;
 
--- FUNCION 2 : Esta función devuelve la cantidad de clientes realizaron órdenes en la ciudad especificada.
-
+-- FUNCION 2 : Esta función devuelve la ciudad de los clientes que han hecho ordenes.
 DELIMITER //
 
 CREATE FUNCTION ClientesPorCiudad(ciudad_nombre VARCHAR(50))
 RETURNS INT
-DETERMINISTIC
+READS SQL DATA
 BEGIN
     DECLARE clientes_ciudad INT;
     
-    SELECT COUNT(DISTINCT o.Id_Cliente) INTO clientes_ciudad
+    SELECT COUNT(o.Id_Cliente) INTO clientes_ciudad
     FROM ORDEN o
-    INNER JOIN FACTURACION f ON o.Id_Orden = f.Id_Orden
-    INNER JOIN DELIVERY d ON f.Id_Delivery = d.Id_Delivery
-    INNER JOIN CIUDADES c ON d.Id_Ciudad = c.Id_Ciudad
+    INNER JOIN CLIENTES cl ON cl.Id_Cliente = o.Id_Cliente
+    INNER JOIN CIUDADES c ON c.Id_Ciudad = cl.Id_Ciudad
     WHERE c.Nombre = ciudad_nombre;
 	RETURN clientes_ciudad;
 END //
@@ -77,6 +75,14 @@ Nombre VARCHAR (50) NOT NULL,
 PRIMARY KEY (Id_Ciudad)
 );
 
+CREATE TABLE IF NOT EXISTS CLIENTES (
+    Id_Cliente INT NOT NULL UNIQUE AUTO_INCREMENT,
+    Nombre_Apellido VARCHAR(50) NOT NULL,
+    Id_Ciudad INT,
+    PRIMARY KEY (Id_Cliente),
+     FOREIGN KEY (Id_Ciudad) REFERENCES CIUDADES (Id_Ciudad)
+);
+
 CREATE TABLE IF NOT EXISTS DELIVERY (
     Id_Delivery INT NOT NULL UNIQUE AUTO_INCREMENT,
     Nombre VARCHAR(50) NOT NULL,
@@ -105,11 +111,6 @@ CREATE TABLE IF NOT EXISTS PROVEEDORES (
     PRIMARY KEY (Id_Proveedor)
 );
 
-CREATE TABLE IF NOT EXISTS CLIENTES (
-    Id_Cliente INT NOT NULL UNIQUE AUTO_INCREMENT,
-    Nombre_Apellido VARCHAR(50) NOT NULL,
-    PRIMARY KEY (Id_Cliente)
-);
 
 CREATE TABLE IF NOT EXISTS EMPLEADOS (
     Id_Empleado INT NOT NULL UNIQUE AUTO_INCREMENT,
@@ -309,49 +310,49 @@ INSERT INTO PROVEEDORES (Razon_Social, Direccion, Telefono, Email) VALUES
     ('Carnicería Don José', 'Av. Santiago del Estero 606', 5559900112, 'pedidos@carniceriadonjose.com');
 
 -- Insertar registros en la tabla CLIENTES
-INSERT INTO CLIENTES (Nombre_Apellido) VALUES
-    ('Juan Pérez'),
-    ('María Gómez'),
-    ('Carlos Rodríguez'),
-    ('Laura Sánchez'),
-    ('Pedro Ramírez'),
-    ('Ana Martínez'),
-    ('Luis Morales'),
-    ('Diana Castro'),
-    ('Oscar Rivas'),
-    ('Gabriela Fernández'),
-    ('José Navarro'),
-    ('Fernanda Ortega'),
-    ('Ricardo Herrera'),
-    ('Silvia Vargas'),
-    ('Andrés Mendoza'),
-    ('Valentina Paredes'),
-    ('Martín Suárez'),
-    ('Natalia Torres'),
-    ('Hugo López'),
-    ('Carolina Aguilar'),
-    ('Sergio Rojas'),
-    ('Elena Montes'),
-    ('Javier Mendoza'),
-    ('Isabel Ramos'),
-    ('Miguel Torres'),
-    ('Verónica Castro'),
-    ('Roberto Soto'),
-    ('Carmen Vargas'),
-    ('Raul Rojas'),
-    ('Ana Maria Sosa'),
-    ('David Méndez'),
-    ('Beatriz Delgado'),
-    ('Francisco Luna'),
-    ('Patricia Navarro'),
-    ('Rafael Rojas'),
-    ('Lorena Paredes'),
-    ('Felipe Cordero'),
-    ('Mónica Guzmán'),
-    ('Santiago Jiménez'),
-    ('Cecilia Mendoza'),
-    ('Diego Herrera'),
-    ('Alejandra Torres');
+INSERT INTO CLIENTES (Nombre_Apellido,Id_Ciudad) VALUES
+    ('Juan Pérez',1),
+    ('María Gómez',2),
+    ('Carlos Rodríguez',5),
+    ('Laura Sánchez',6),
+    ('Pedro Ramírez',18),
+    ('Ana Martínez',8),
+    ('Luis Morales',8),
+    ('Diana Castro',8),
+    ('Oscar Rivas',10),
+    ('Gabriela Fernández',1),
+    ('José Navarro',1),
+    ('Fernanda Ortega',1),
+    ('Ricardo Herrera',1),
+    ('Silvia Vargas',3),
+    ('Andrés Mendoza',6),
+    ('Valentina Paredes',16),
+    ('Martín Suárez',15),
+    ('Natalia Torres',10),
+    ('Hugo López',10),
+    ('Carolina Aguilar',5),
+    ('Sergio Rojas',9),
+    ('Elena Montes',10),
+    ('Javier Mendoza',1),
+    ('Isabel Ramos',12),
+    ('Miguel Torres',16),
+    ('Verónica Castro',1),
+    ('Roberto Soto',8),
+    ('Carmen Vargas',9),
+    ('Raul Rojas',10),
+    ('Ana Maria Sosa',14),
+    ('David Méndez',13),
+    ('Beatriz Delgado',1),
+    ('Francisco Luna',9),
+    ('Patricia Navarro',9),
+    ('Rafael Rojas',6),
+    ('Lorena Paredes',7),
+    ('Felipe Cordero',9),
+    ('Mónica Guzmán',12),
+    ('Santiago Jiménez',3),
+    ('Cecilia Mendoza',3),
+    ('Diego Herrera',3),
+    ('Alejandra Torres',1);
 
 -- Insertamos registros en la tabla EMPLEADOS
 INSERT INTO EMPLEADOS (Nombre, Apellido, Legajo, Horario, Id_Cargo) VALUES
@@ -539,4 +540,4 @@ from VistaDeliveries;
 -- LLAMADO A LAS FUNCIONES
 
 SELECT TotalProductosVendidos('2023-01-01', '2023-06-30');
-SELECT ClientesPorCiudad('Mataderos');
+SELECT ClientesPorCiudad('Ciudad Autonoma');
