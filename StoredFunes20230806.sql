@@ -549,19 +549,19 @@ SELECT ClientesPorCiudad('Ciudad Autonoma');
 use fastfood;
 DROP PROCEDURE IF EXISTS `sp_get_orden_order`;
 DELIMITER $$
-
+-- SE INGRESAN DOS VALORES: EL CAMPO FIELD ES EL PARAMETRO QUE SE TOMA COMO CRITERIO DE ORDEN, Y EL CAMPO TIPO ES PARA INDICAR SI ES DEL TIPO 'ASC' O 'DESC'
 CREATE PROCEDURE `sp_get_orden_order` (IN field CHAR(20),tipo char(4))
 BEGIN
-	
+	-- VALIDACION DE DATOS
     IF field <> '' AND tipo <> '' THEN
 		SET @orden_order = CONCAT(' ORDER BY ', field, ' ',  tipo); # 'ORDER BY name'
 
 	ELSE
-		SET @orden_order = '';
+		SET @orden_order = ''; -- PARA EL CASO QUE EL INGRESO ESTE VACIO, NO SE REALIZA NINGUN ORDENAMIENTO
     END IF;
-    
+    -- SE SETEA LA VARIABLE 'CONSULTA' CON LA CONCATENACION DEL ORDER BY MAS LOS DOS VALORES INGRESADOS.
     SET @consulta = CONCAT('SELECT * FROM fastfood.orden', @orden_order); # 'SELECT * FROM fastfood.orden ORDER BY name'
-    
+    -- SE EJECUTA LO INGRESADO Y CONVERTIDO A SENTENCIA SQL
     PREPARE clasify FROM @consulta;
     EXECUTE clasify;
     DEALLOCATE PREPARE clasify;
@@ -577,13 +577,14 @@ DROP PROCEDURE IF EXISTS sp_insertar_cliente;
 
 
 DELIMITER $$
-
-CREATE PROCEDURE sp_insertar_cliente(IN cliente CHAR(40))
+-- SE INGRESA EL NOMBRE DEL CLIENTE A AGREGAR.
+CREATE PROCEDURE sp_insertar_cliente(IN cliente CHAR(40)) 
 BEGIN
+	-- VALIDACION DE DATOS
     IF cliente <> ''  THEN
-        INSERT INTO CLIENTES (Nombre_Apellido) VALUES (cliente);
+        INSERT INTO CLIENTES (Nombre_Apellido) VALUES (cliente); -- SE AGREGA EL CLIENTE
     ELSE
-        SIGNAL SQLSTATE '45000'
+        SIGNAL SQLSTATE '45000' -- SI NO SE TIPEA NINGUN VALOR, NOS DEVUELVE UN ERROR EN LA CREACION.
         SET MESSAGE_TEXT = 'ERROR: NO SE PUDO CREAR EL CLIENTE. Verifique que todos los campos estén completos.';
     END IF;
 END$$
