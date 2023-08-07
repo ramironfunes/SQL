@@ -554,13 +554,13 @@ CREATE PROCEDURE `sp_get_orden_order` (IN field CHAR(20),tipo char(4))
 BEGIN
 	-- VALIDACION DE DATOS
     IF field <> '' AND tipo <> '' THEN
-		SET @orden_order = CONCAT(' ORDER BY ', field, ' ',  tipo); # 'ORDER BY name'
+		SET @orden_order = CONCAT(' ORDER BY ', field, ' ',  tipo); # 'ORDER BY field + tipo'
 
 	ELSE
 		SET @orden_order = ''; -- PARA EL CASO QUE EL INGRESO ESTE VACIO, NO SE REALIZA NINGUN ORDENAMIENTO
     END IF;
     -- SE SETEA LA VARIABLE 'CONSULTA' CON LA CONCATENACION DEL ORDER BY MAS LOS DOS VALORES INGRESADOS.
-    SET @consulta = CONCAT('SELECT * FROM fastfood.orden', @orden_order); # 'SELECT * FROM fastfood.orden ORDER BY name'
+    SET @consulta = CONCAT('SELECT * FROM fastfood.orden', @orden_order); # 'SELECT * FROM fastfood.orden ORDER BY field + tipo'
     -- SE EJECUTA LO INGRESADO Y CONVERTIDO A SENTENCIA SQL
     PREPARE clasify FROM @consulta;
     EXECUTE clasify;
