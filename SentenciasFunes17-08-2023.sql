@@ -1,3 +1,6 @@
+USE Mysql;
+
+
 DROP USER IF EXISTS 'kraken@localhost';
 DROP USER IF EXISTS 'ASkywalker';
 CREATE USER IF NOT EXISTS 'kraken@localhost' IDENTIFIED BY 'ramiro123'; -- Creamos el usuario kraken@localhost
