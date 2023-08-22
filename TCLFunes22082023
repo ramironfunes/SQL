@@ -674,7 +674,7 @@ BEGIN
     -- Confirmar o deshacer la transacción
     
     -- ROLLBACK;
-    COMMIT; 
+    -- COMMIT; 
     -- Vuelvo a setear la restriccion de campos FK.
     SET FOREIGN_KEY_CHECKS = 1;
 END;
@@ -705,6 +705,6 @@ release savepoint lote_1;
 -- Confirmacion o rollback de transaccion.
 
 -- ROLLBACK;
-COMMIT; 
+-- COMMIT; 
 
 
