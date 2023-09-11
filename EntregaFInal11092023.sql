@@ -1,4 +1,3 @@
-
 -- Crearemos la base de datos fastfood
 DROP DATABASE IF EXISTS `fastfood`;
 
@@ -48,6 +47,7 @@ DELIMITER ;
 -- CREACION DE TABLAS
 
 DROP TABLE IF EXISTS FACTURACION;
+DROP TABLE IF EXISTS REPARTIDORES;
 DROP TABLE IF EXISTS ORDEN;
 DROP TABLE IF EXISTS PRODUCTO;
 DROP TABLE IF EXISTS EMPLEADOS;
@@ -65,6 +65,12 @@ CREATE TABLE IF NOT EXISTS CARGOS (
     Id_Cargo INT NOT NULL UNIQUE AUTO_INCREMENT,
     Descripcion VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY (Id_Cargo)
+);
+
+CREATE TABLE IF NOT EXISTS REPARTIDORES (
+    Id_Repartidor INT NOT NULL UNIQUE AUTO_INCREMENT,
+    Nombre VARCHAR(100) NOT NULL UNIQUE,
+    PRIMARY KEY (Id_Repartidor)
 );
 
 CREATE TABLE CIUDADES (
@@ -88,8 +94,10 @@ CREATE TABLE IF NOT EXISTS DELIVERY (
     Telefono VARCHAR(10) NOT NULL,
     Direccion VARCHAR(50) NOT NULL,
     Id_Ciudad INT NOT NULL,
+    Id_Repartidor INT NOT NULL,
     PRIMARY KEY (Id_Delivery),
-	FOREIGN KEY (Id_Ciudad) REFERENCES CIUDADES (Id_Ciudad)
+	FOREIGN KEY (Id_Ciudad) REFERENCES CIUDADES (Id_Ciudad),
+    FOREIGN KEY (Id_Repartidor) REFERENCES REPARTIDORES (Id_Repartidor)
     
 );
 
@@ -194,7 +202,17 @@ ALTER TABLE log_orden
 
 -- INSERCION DE REGISTROS EN TABLAS
 
-USE FASTFOOD;
+-- Insertamos registros en la tabla REPARTIDORES
+
+INSERT INTO Repartidores (Nombre) VALUES
+	('Roberto Garcia'),
+    ('Ramiro Funes'), 
+    ('Lionel Messi'), 
+    ('Leandro Paredes'),
+    ('Gabriel Batistuta'),
+    ('Juan Roman Riquelme'),
+     ('Lautaro Martinez');
+     
 -- Insertamos registros en la tabla CARGOS
 INSERT INTO CARGOS (Descripcion) VALUES
     ('Gerente de Restaurante'),
@@ -240,57 +258,57 @@ INSERT INTO CARGOS (Descripcion) VALUES
 
 -- Insertamos registros en la tabla DELIVERY
 
-INSERT INTO DELIVERY (Nombre, Telefono, Direccion, Id_Ciudad) VALUES
-('Juan Perez', '555-1234', 'Calle 1 123', 1),
-('María Gómez', '555-5678', 'Avenida 2 456', 2),
-('Carlos Rodríguez', '555-9876', 'Calle 3 789', 3),
-('Laura Sánchez', '555-2345', 'Avenida 4 012', 4),
-('Pedro Ramírez', '555-6789', 'Calle 5 345', 5),
-('Ana Martínez', '555-3456', 'Avenida 6 678', 6),
-('Luis Morales', '555-8765', 'Calle 7 901', 7),
-('Diana Castro', '555-4321', 'Avenida 8 234', 8),
-('Oscar Rivas', '555-7654', 'Calle 9 567', 9),
-('Gabriela Fernández', '555-2109', 'Avenida 10 890', 10),
-('José Navarro', '555-6543', 'Calle 11 1234', 11),
-('Fernanda Ortega', '555-1098', 'Avenida 12 5678', 12),
-('Ricardo Herrera', '555-5432', 'Calle 13 9012', 13),
-('Silvia Vargas', '555-0987', 'Avenida 14 3456', 14),
-('Andrés Mendoza', '555-3210', 'Calle 15 6789', 15),
-('Valentina Paredes', '555-7654', 'Avenida 16 0123', 16),
-('Martín Suárez', '555-0123', 'Calle 17 4567', 17),
-('Natalia Torres', '555-5678', 'Avenida 18 8901', 18),
-('Hugo López', '555-2345', 'Calle 19 2345', 1),
-('Carolina Aguilar', '555-6789', 'Avenida 20 5678', 2),
-('Sergio Rojas', '555-8765', 'Calle 21 9012', 3),
-('Elena Montes', '555-5432', 'Avenida 22 3456', 4),
-('Javier Mendoza', '555-0987', 'Calle 23 6789', 5),
-('Isabel Ramos', '555-3210', 'Avenida 24 0123', 6),
-('Miguel Torres', '555-7654', 'Calle 25 4567', 7),
-('Verónica Castro', '555-0123', 'Avenida 26 8901', 8),
-('Roberto Soto', '555-5678', 'Calle 27 2345', 9),
-('Carmen Vargas', '555-2345', 'Avenida 28 5678', 10),
-('Raul Rojas', '555-6789', 'Calle 29 9012', 11),
-('Ana Maria Sosa', '555-4321', 'Avenida 30 3456', 12),
-('David Méndez', '555-1098', 'Calle 31 6789', 13),
-('Beatriz Delgado', '555-5432', 'Avenida 32 0123', 14),
-('Francisco Luna', '555-8765', 'Calle 33 4567', 15),
-('Patricia Navarro', '555-3210', 'Avenida 34 8901', 16),
-('Rafael Rojas', '555-7654', 'Calle 35 2345', 17),
-('Lorena Paredes', '555-0987', 'Avenida 36 5678', 18),
-('Felipe Cordero', '555-5678', 'Calle 37 9012', 1),
-('Mónica Guzmán', '555-2345', 'Avenida 38 3456', 2),
-('Santiago Jiménez', '555-6789', 'Calle 39 6789', 3),
-('Cecilia Mendoza', '555-4321', 'Avenida 40 0123', 4),
-('Diego Herrera', '555-1098', 'Calle 41 4567', 5),
-('Alejandra Torres', '555-5432', 'Avenida 42 8901', 6),
-('Mario Ramos', '555-8765', 'Calle 43 2345', 7),
-('Lucía Soto', '555-3210', 'Avenida 44 5678', 8),
-('Andrés Montes', '555-7654', 'Calle 45 9012', 9),
-('Natalia Rojas', '555-0123', 'Avenida 46 3456', 10),
-('Jorge Navarro', '555-5678', 'Calle 47 6789', 11),
-('Paula Delgado', '555-2345', 'Avenida 48 0123', 12),
-('Sebastián Luna', '555-6789', 'Calle 49 3456', 13),
-('Adriana Vargas', '555-0987', 'Avenida 50 6789', 14);
+INSERT INTO DELIVERY (Nombre, Telefono, Direccion, Id_Ciudad, Id_Repartidor) VALUES
+('Juan Perez', '555-1234', 'Calle 1 123', 1, 1),
+('María Gómez', '555-5678', 'Avenida 2 456', 2,2),
+('Carlos Rodríguez', '555-9876', 'Calle 3 789', 3,4),
+('Laura Sánchez', '555-2345', 'Avenida 4 012', 4,5),
+('Pedro Ramírez', '555-6789', 'Calle 5 345', 5,1),
+('Ana Martínez', '555-3456', 'Avenida 6 678', 6,6),
+('Luis Morales', '555-8765', 'Calle 7 901', 7,2),
+('Diana Castro', '555-4321', 'Avenida 8 234', 8,3),
+('Oscar Rivas', '555-7654', 'Calle 9 567', 9,1),
+('Gabriela Fernández', '555-2109', 'Avenida 10 890', 10,2),
+('José Navarro', '555-6543', 'Calle 11 1234', 11,3),
+('Fernanda Ortega', '555-1098', 'Avenida 12 5678', 12,3),
+('Ricardo Herrera', '555-5432', 'Calle 13 9012', 13,1),
+('Silvia Vargas', '555-0987', 'Avenida 14 3456', 14,5),
+('Andrés Mendoza', '555-3210', 'Calle 15 6789', 15,5),
+('Valentina Paredes', '555-7654', 'Avenida 16 0123', 16,5),
+('Martín Suárez', '555-0123', 'Calle 17 4567', 17,1),
+('Natalia Torres', '555-5678', 'Avenida 18 8901', 18,2),
+('Hugo López', '555-2345', 'Calle 19 2345', 1,2),
+('Carolina Aguilar', '555-6789', 'Avenida 20 5678', 2,2),
+('Sergio Rojas', '555-8765', 'Calle 21 9012', 3,3),
+('Elena Montes', '555-5432', 'Avenida 22 3456', 4,3),
+('Javier Mendoza', '555-0987', 'Calle 23 6789', 5,3),
+('Isabel Ramos', '555-3210', 'Avenida 24 0123', 6,1),
+('Miguel Torres', '555-7654', 'Calle 25 4567', 7,2),
+('Verónica Castro', '555-0123', 'Avenida 26 8901', 8,2),
+('Roberto Soto', '555-5678', 'Calle 27 2345', 9,3),
+('Carmen Vargas', '555-2345', 'Avenida 28 5678', 10,3),
+('Raul Rojas', '555-6789', 'Calle 29 9012', 11,1),
+('Ana Maria Sosa', '555-4321', 'Avenida 30 3456', 12,2),
+('David Méndez', '555-1098', 'Calle 31 6789', 13,4),
+('Beatriz Delgado', '555-5432', 'Avenida 32 0123', 14,4),
+('Francisco Luna', '555-8765', 'Calle 33 4567', 15,4),
+('Patricia Navarro', '555-3210', 'Avenida 34 8901', 16,2),
+('Rafael Rojas', '555-7654', 'Calle 35 2345', 17,2),
+('Lorena Paredes', '555-0987', 'Avenida 36 5678', 18,1),
+('Felipe Cordero', '555-5678', 'Calle 37 9012', 1,1),
+('Mónica Guzmán', '555-2345', 'Avenida 38 3456', 2,1),
+('Santiago Jiménez', '555-6789', 'Calle 39 6789', 3,2),
+('Cecilia Mendoza', '555-4321', 'Avenida 40 0123', 4,1),
+('Diego Herrera', '555-1098', 'Calle 41 4567', 5,4),
+('Alejandra Torres', '555-5432', 'Avenida 42 8901', 6,4),
+('Mario Ramos', '555-8765', 'Calle 43 2345', 7,5),
+('Lucía Soto', '555-3210', 'Avenida 44 5678', 8,1),
+('Andrés Montes', '555-7654', 'Calle 45 9012', 9,1),
+('Natalia Rojas', '555-0123', 'Avenida 46 3456', 10,2),
+('Jorge Navarro', '555-5678', 'Calle 47 6789', 11,2),
+('Paula Delgado', '555-2345', 'Avenida 48 0123', 12,1),
+('Sebastián Luna', '555-6789', 'Calle 49 3456', 13,1),
+('Adriana Vargas', '555-0987', 'Avenida 50 6789', 14,5);
 
 
 -- Insertamos registros en la tabla METODOPAGO
