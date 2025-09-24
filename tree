@@ -1,0 +1,9 @@
+data-quality-sql/
+├─ seed/
+│   └─ init.sql
+├─ checks/
+│   ├─ integrity/
+│   ├─ duplicates/
+│   └─ reconciliation/
+├─ procedures/
+└─ reports/
