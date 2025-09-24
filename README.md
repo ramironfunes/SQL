@@ -1,22 +1,22 @@
-# Logistics Data Quality SQL Kit 🗄️
+# Data Quality SQL Toolkit 🗄️
 
 ![SQL](https://img.shields.io/badge/SQL-Server%2FMySQL%2FPostgres-blue)
 ![Status](https://img.shields.io/badge/status-active-success)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-This project contains **SQL scripts and stored procedures** designed to audit and ensure **data quality** in logistics and ERP systems.  
-It simulates real-world checks I performed in projects with **WMS, Softland, and NAVIS integrations**.
+This repository contains **SQL scripts, stored procedures, and triggers** designed to perform **data quality checks** in different database environments.  
+It includes integrity validations, duplicate detection, reconciliation queries, and automation scripts.
 
 ---
 
 ## 📘 Project Overview
 
-Data consistency is critical in logistics operations. This repository provides a toolkit to detect and prevent:
+Ensuring data quality is critical in any information system. This toolkit provides practical scripts to:
 
-- 🔗 **Orphan records** (orders without customers, containers without bookings)  
-- 🔎 **Duplicate transactions**  
-- 📊 **Stock reconciliation mismatches** between operational and ERP systems  
-- ⏱️ **Scheduled checks** via stored procedures  
+- 🔗 **Detect orphan records** (missing references, invalid foreign keys)  
+- 🔎 **Find duplicate transactions or rows**  
+- 📊 **Perform reconciliation queries** between related tables  
+- ⚙️ **Automate validations** with stored procedures and triggers  
 
 ---
 
