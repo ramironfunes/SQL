@@ -51,6 +51,28 @@ data-quality-sql/
 | `procedures/triggers_audit.sql`                             | Triggers to enforce business rules                 |
 | `reports/sample_report.md`                                  | Example output/evidence of executed checks         |
 
+🚀 Quick Start
+
+Create the demo DB:
+
+source seed/init.sql;
+
+
+Run integrity checks:
+
+source checks/integrity/integrity_constraints_and_updates.sql;
+
+
+Run duplicate detection:
+
+source checks/duplicates/check_duplicates_orders.sql;
+
+
+Run reconciliation queries:
+
+source checks/reconciliation/reconciliation_customers_orders.sql;
+
+
 
 🛠️ Tech Stack
 
