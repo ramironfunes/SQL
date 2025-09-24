@@ -39,3 +39,33 @@ data-quality-sql/
 │   └─ triggers_audit.sql
 └─ reports/
     └─ sample_report.md
+
+| File                                                        | Purpose                                            |
+| ----------------------------------------------------------- | -------------------------------------------------- |
+| `seed/init.sql`                                             | Demo database with valid + invalid records         |
+| `checks/integrity/integrity_constraints_and_updates.sql`    | Constraints and updates to preserve data integrity |
+| `checks/duplicates/check_duplicates_orders.sql`             | Detect duplicate rows/orders in a dataset          |
+| `checks/reconciliation/reconciliation_customers_orders.sql` | Reconcile records between customers and orders     |
+| `procedures/db_backup_script.sql`                           | Scripts for database backup/restore                |
+| `procedures/stored_procedures_audit.sql`                    | Stored procedures for recurring validations        |
+| `procedures/triggers_audit.sql`                             | Triggers to enforce business rules                 |
+| `reports/sample_report.md`                                  | Example output/evidence of executed checks         |
+
+
+🛠️ Tech Stack
+
+SQL Server
+
+MySQL
+
+PostgreSQL (queries are portable with small adjustments)
+
+📈 Use Cases
+
+Validating data integrity after migrations
+
+Running quality checks in ETL/BI pipelines
+
+Detecting duplicates and orphan records in production databases
+
+Automating checks via stored procedures and triggers
