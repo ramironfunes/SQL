@@ -1,0 +1,8 @@
+--Detalle de Conteo
+
+select far_conteo_cab.conteo_cab_pk as Codigo_conteo, fcc_fecha as Fecha_Creacion_Conteo, alm_almacenes.almacen_deno as ALMACEN, far_conteo_det.fcd_num_secuencia as Nro_Marbete, alm_articulos_mc.cod_bar_mc_pr as Codigo, alm_articulos_mc.art_mc_nom as ARTICULO, far_conteo_det.fcd_existencias as Existencia_virtual from far_conteo_cab
+inner join alm_almacenes on alm_almacenes.almacen_pk = far_conteo_cab.almacen_pk
+inner join far_conteo_det on far_conteo_det.conteo_cab_pk = far_conteo_cab.conteo_cab_pk
+inner join alm_articulos_mc on alm_articulos_mc.cod_art_mc_pk = far_conteo_det.cod_art_mc_pk
+where far_conteo_cab.conteo_cab_pk = 20
+order by far_conteo_det.fcd_num_secuencia

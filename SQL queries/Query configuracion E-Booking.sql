@@ -1,0 +1,1 @@
+select * from cfg_referencia where codigo_descriptor = '6297'

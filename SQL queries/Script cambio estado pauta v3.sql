@@ -1,0 +1,1 @@
+update far_det_pac_car set usuario_pk = '305470', fdpc_estado_hp = '3' where far_detpaccar_pk = '42178303'

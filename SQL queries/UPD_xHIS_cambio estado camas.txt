@@ -1,0 +1,3 @@
+UPDATE habitaciones SET camasocupadas = 0 WHERE cod_habitacion_pk = 'H 127'
+
+UPDATE habitaciones SET camasocupadas = 0 WHERE cod_habitacion_pk = 'H 128'

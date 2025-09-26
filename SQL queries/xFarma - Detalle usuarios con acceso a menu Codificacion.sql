@@ -1,0 +1,42 @@
+--xFarma - Detalle usuarios con acceso a menu Codificacion
+
+select cla_usuarios.nombre_usu, cla_usuarios.usu_login as LOGIN, cla_menus.menu_pk, cla_menus.opcion_menu as MENU from cla_usu_menus cla_usu_menus
+inner join cla_usuarios cla_usuarios on cla_usuarios.usuario_pk = cla_usu_menus.usuario_pk
+inner join cla_menus cla_menus on cla_menus.menu_pk = cla_usu_menus.menu_pk
+where cla_usu_menus.menu_pk in ('100013',
+'100014',
+'100229',
+'100015',
+'100268',
+'100269',
+'100267',
+'100016',
+'100017',
+'100018',
+'100019',
+'100020',
+'100021',
+'100022',
+'100221',
+'100216',
+'100023',
+'100024',
+'100242',
+'100025',
+'100026',
+'100027',
+'100028',
+'100029',
+'100030',
+'100031',
+'100032',
+'100033',
+'100034',
+'100035',
+'100037',
+'100038',
+'100266',
+'100238',
+'100011',
+'100012') and usu_activo = 1
+order by 1,4
