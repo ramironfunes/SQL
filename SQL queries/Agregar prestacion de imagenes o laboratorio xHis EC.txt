@@ -1,0 +1,266 @@
+Agregar prestacion nueva de IMAGENES o LABORATORIO a HIS y/o Escritorio Clinico (EC)
+
+
+-- La prestacion debe estar cargada en la tabla Prest_item (donde estan las prestaciones disponibles para mapear), desde esa tabla obtener el valor de prest_item_pk
+
+	+ TABLA Prest_Item
+		
+		Ejemplo (acotada a los valores importantes):
+		
+				prest_item_pk	prest_grupo_pk	prest_item_cod	prest_item_desc				
+					47970			127				TNF5118   	TOMOGRAFIA DE TORAX SIMPLE
+					
+		Obtener:
+				@Prest_Item_Pk = prest_item_pk correspondiente a la prestacion deseada
+	
+
+-- Independientemente si se va a agregar la prestacion a EC y/o HIS, debemos agregarla a Gpc_Catalogo, Gpc_Cat_Local y Gpc_Cat_Serv.
+
+	+ TABLA Gpc_Catalogo
+		
+		Ejemplo:
+				insert into gpc_catalogo VALUES 
+				(2299, 47970, 2299, 15, '2299', 'TOMOGRAFIA DE TORAX SIMPLE', NULL, 0, 1, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, 0);
+			
+		Obtener:
+				@Prest_Item_Pk = prest_item_pk correspondiente a la prestacion deseada
+				@CatNivel = select top 100 * from gpc_cat_nivel_2
+					**obtener la PK correspondiente a la descripcion (Ej: 15 es para tomografias)
+					**obtener la PK correspondiente a la descripcion (Ej: 57 es para laboratorio)
+					
+				@MaxCatalogo = SELECT max(catalogo_pk)+1 FROM gpc_catalogo
+		
+		Reemplazar:
+				insert into gpc_catalogo VALUES 
+				(@MaxCatalogo, @Prest_Item_Pk, @MaxCatalogo, @CatNivel, ' @MaxCatalogo ', ' NOMBRE DE PRESTACION NUEVA ', NULL, 0, 1, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, 0);
+	
+
+
+	+ TABLA Gpc_cat_local
+	
+		Ejemplo: 								
+				INSERT INTO gpc_cat_local VALUES (2285, 161, 2299, 0, NULL, '2285', 'TOMOGRAFIA DE TORAX SIMPLE', '0', 1, '0', NULL, NULL, 0, 1, 1, 1, 1)
+
+		Obtener:
+				@MaxCatLocal = SELECT max(cat_local_pk)+1 FROM gpc_cat_local
+				@Catalogo_Pk = Catalogo_Pk correspondiente al registro cargado en el paso anterior (@MaxCatalogo, insert en tabla Gpc_Catalogo)
+				@codigo_servicio = buscar el codigo de servicio que coincida con la practica (select top 500 * from servicios)
+					 ** ejemplo el codigo de servicio 161 es Imagenes-Tomografia
+					 ** ejemplo el codigo de servicio 42 es Laboratorio
+		
+		Reemplazar:
+				INSERT INTO gpc_cat_local VALUES (@MaxCatLocal, @codigo_servicio, @Catalogo_Pk, 0, NULL, ' @MaxCatLocal ', ' NOMBRE DE PRESTACION NUEVA ', '0', 1, '0', NULL, NULL, 0, 1, 1, 1, 1)
+			
+			
+
+	+ TABLA Gpc_cat_serv
+		
+		Ejemplo:
+				insert into gpc_cat_serv values (2299,1,1,0,1,1,1);
+				insert into gpc_cat_serv values (2299,207,1,0,1,1,1); 
+					** 207 es la cantidad maxima de categorias en esta tabla
+				
+		Obtener:
+				@Catalogo_Pk = Catalogo_Pk correspondiente al registro cargado en un paso anterior (insert en tabla Gpc_Catalogo)
+				@MaxCatServ = select top 1 codigo_servicio from  gpc_cat_serv order by codigo_servicio desc
+					** El codigo_servicio actualmente se inserta hasta el 207 (Atencion: NO existen todos los valores entre el 1 y 207), checkear antes de pedir el insert cual es el cat_serv MAXIMO que existe en esa tabla
+		
+		Reemplazar:		
+				insert into gpc_cat_serv values (@Catalogo_Pk,1,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,2,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,3,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,4,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,5,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,6,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,7,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,8,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,9,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,10,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,11,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,12,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,13,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,14,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,15,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,16,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,17,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,18,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,19,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,20,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,21,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,22,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,23,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,24,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,25,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,26,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,27,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,28,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,29,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,30,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,31,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,32,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,33,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,34,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,35,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,36,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,37,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,38,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,39,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,40,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,41,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,42,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,43,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,44,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,45,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,46,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,47,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,48,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,49,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,50,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,51,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,52,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,53,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,54,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,55,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,56,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,57,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,58,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,59,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,60,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,61,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,62,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,63,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,64,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,65,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,66,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,67,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,68,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,69,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,71,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,72,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,73,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,74,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,75,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,76,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,77,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,78,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,79,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,80,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,81,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,82,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,83,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,84,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,85,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,86,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,87,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,88,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,89,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,93,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,94,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,95,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,96,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,97,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,98,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,103,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,104,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,106,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,107,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,108,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,109,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,110,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,111,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,112,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,113,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,114,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,115,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,116,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,117,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,118,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,119,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,120,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,121,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,122,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,123,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,124,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,125,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,126,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,127,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,128,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,129,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,130,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,131,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,132,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,133,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,134,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,136,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,137,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,138,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,139,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,140,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,141,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,142,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,143,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,144,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,145,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,146,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,147,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,148,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,149,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,150,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,151,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,159,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,177,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,179,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,180,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,181,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,182,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,184,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,187,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,193,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,203,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,204,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,205,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,206,1,0,1,1,1);
+				insert into gpc_cat_serv values (@Catalogo_Pk,207,1,0,1,1,1);
+				
+-- Agregar prestacion a Escritorio Clinico
+
+	+ TABLA Viaduct_Map_Ec_Ris (Eges-Imagenes) / Viaduct_Map_Ec_Lis (Rapela-Laboratorio)
+	
+		Ejemplo:
+				IMAGENES = INSERT INTO VIADUCT_MAP_EC_RIS VALUES (544, 1, '843725', 'TOMOGRAFIA DE TORAX SIMPLE', '843725/0')
+				
+				LABORATORIO = INSERT INTO VIADUCT_MAP_EC_LIS VALUES ('2669', 1, '20021', 'HISTOPLASMA CAPSOLATUM - DNA CUALITATIVO (PCR)');
+
+	
+		obtener:
+				@Cat_local_pk = pk correspondiente a la prestacion de la tabla Gpc_Cat_Local (@MaxCatLocal) 
+				
+		Reemplazar: 
+				IMAGENES = INSERT INTO VIADUCT_MAP_EC_RIS VALUES (@Cat_local_pk, 1, 'CODIGO IMAGENES SOLICITADO', ' NOMBRE DE PRESTACION NUEVA ', '843725/0')
+				
+				LABORATORIO = INSERT INTO VIADUCT_MAP_EC_LIS VALUES ('@Cat_local_pk', 1, 'CODIGO LABORATORIO SOLICITADO', ' NOMBRE DE PRESTACION NUEVA ');
+-- Agregar prestacion a His
+
+	+ TABLA Viaduct_Map_His_Ris (Eges-Imagenes) / Viaduct_Map_His_Lis (Rapela-Laboratorio)
+
+		Ejemplo: 
+				IMAGENES = INSERT INTO VIADUCT_MAP_HIS_RIS VALUES (54490, 1, '843725', 'TOMOGRAFIA DE TORAX SIMPLE', '843725/0')
+
+				LABORATORIO = INSERT INTO VIADUCT_MAP_HIS_LIS values (54682, 1, 20021, 'HISTOPLASMA CAPSOLATUM - DNA CUALITATIVO (PCR)')
+		
+		Obtener: 
+				@Prest_Item_Pk = prest_item_pk correspondiente a la prestacion deseada
+				
+		Reemplazar:
+				IMAGENES = INSERT INTO VIADUCT_MAP_HIS_RIS VALUES (@Prest_Item_Pk, 1, 'CODIGO IMAGENES SOLICITADO', ' NOMBRE DE PRESTACION NUEVA ', 'CODIGO IMAGENES SOLICITADO/REGION')
+				
+				LABORATORIO = INSERT INTO VIADUCT_MAP_HIS_LIS values (@Prest_Item_Pk, 1, 'CODIGO LABORATORIO SOLICITADO', ' NOMBRE DE PRESTACION NUEVA ')
+		
+	
+
+	
+
+
+
+
+
